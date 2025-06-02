@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Resolver</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      padding: 50px;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      color: #444;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #eaf7ea;
+      border-left: 5px solid #28a745;
+      display: none;
+    }
+
+    .error {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ffe5e5;
+      border-left: 5px solid #dc3545;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Bank Account Resolver</h1>
+
+    <form id="resolver">
+      <label for="account_number">Account Number</label>
+      <input type="text" id="account_number" name="account_number" required id="account_number" />
+
+      <label for="bank_code">Bank</label>
+      <select id="bank_code" name="bank_code" required id="bank_code" >
+        <option value="">Select Bank</option>
+        <option value="044">Access Bank</option>
+        <option value="011">First Bank</option>
+        <option value="058">GTBank</option>
+        <option value="070">Fidelity Bank</option>
+        <option value="032">Union Bank</option>
+        <option value="033">United Bank for Africa (UBA)</option>
+        <option value="035">Wema Bank</option>
+        <option value="057">Zenith Bank</option>
+        <!-- Add more banks as needed -->
+      </select>
+
+      <button type="submit">Resolve Account</button>
+    </form>
+
+    <div class="result" id="result">
+      <p><strong>Account Name:</strong> <span id="account_name"></span></p>
+    </div>
+
+    <div class="error" id="error">
+      <p id="error_message"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("resolver").addEventListener("submit", async (e) => {
+        e.preventDefault()
+        const account_number = document.getElementById("account_number").value
+        const bank_code = document.getElementById("bank_code").value
+        
+        const response = await fetch(`/resolve/${account_number}/${bank_code}`)
+        const data = await response.json()
+        const verifiedName = data.accountName
+        document.getElementById("result").style.display = "block"
+        document.getElementById("account_name").innerHTML = `${verifiedName}`
+    })
+  </script>
+
+</body>
+</html>
